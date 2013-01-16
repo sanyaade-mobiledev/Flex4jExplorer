@@ -3,11 +3,8 @@ package com.emitrom.flex4j.explorer.client.ui.demos.misc.maps;
 import com.emitrom.flash4j.core.client.events.Event;
 import com.emitrom.flash4j.core.client.events.MouseEvent;
 import com.emitrom.flash4j.core.client.events.handlers.EventHandler;
-import com.emitrom.flash4j.flex.client.mx.containers.ControlBar;
-import com.emitrom.flash4j.flex.client.mx.containers.Panel;
+import com.emitrom.flash4j.flex.client.mx.containers.HBox;
 import com.emitrom.flash4j.flex.client.mx.controls.Button;
-import com.emitrom.flash4j.flex.client.mx.controls.Spacer;
-import com.emitrom.flash4j.flex.client.mx.core.ContainerLayout;
 import com.emitrom.flash4j.flex.maps.client.MapLoadHandler;
 import com.emitrom.flash4j.flex.maps.client.MapWidget;
 import com.emitrom.flex4j.explorer.client.ui.demos.AbstractDemo;
@@ -16,6 +13,8 @@ import com.emitrom.pilot.maps.client.base.LatLng;
 import com.emitrom.pilot.maps.client.core.MapTypeId;
 import com.emitrom.pilot.maps.client.overlays.InfoWindow;
 import com.emitrom.pilot.maps.client.overlays.Marker;
+import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Window;
 
 public class GoogleMapsDemo extends AbstractDemo {
 
@@ -26,48 +25,25 @@ public class GoogleMapsDemo extends AbstractDemo {
         return INSTANCE;
     }
 
-    private Button button = new Button("Change Map");
     private GMap googleMap;
+    private MapWidget mapWidget;
 
     private GoogleMapsDemo() {
-        final Panel panel = new Panel("GoogleMaps example");
-        panel.setLayout(ContainerLayout.ABSOLUTE);
-        panel.setCentered();
-        panel.setPercentSize(80, 80);
+        srcButton.setEnabled(false);
 
-        final MapWidget w = new MapWidget();
-        w.addMapLoadHandler(new MapLoadHandler() {
+        this.addElement(getButtonBox());
+
+        mapWidget = new MapWidget();
+        mapWidget.asUIComponent().strech();
+        mapWidget.asUIComponent().setPercentSize(90, 80);
+        mapWidget.asUIComponent().setCentered();
+        mapWidget.addMapLoadHandler(new MapLoadHandler() {
             @Override
             public void onMapLoad() {
-
-                // create the Google map from the map widget
-                googleMap = new GMap(w.getMap());
-
-                LatLng position = googleMap.getCenter();
-                Marker marker = new Marker(googleMap, position);
-
-                InfoWindow info = new InfoWindow();
-                info.setContent("Flash4j 3.1 and Google Maps");
-                info.open(googleMap, marker);
-
+                googleMap = new GMap(mapWidget.getMap());
             }
         });
-        panel.addElement(w);
-        this.addElement(panel);
-
-        ControlBar controlBar = new ControlBar();
-        controlBar.addElement(new Spacer());
-
-        button.addEventHandler(MouseEvent.CLICK, new EventHandler() {
-            @Override
-            public void onEvent(Event event) {
-                googleMap.setZoom(7);
-                googleMap.setMapType(MapTypeId.HYBRID);
-                button.setEnabled(false);
-            }
-        });
-        controlBar.addElement(button);
-        panel.addElement(controlBar);
+        this.addElement(mapWidget);
 
     }
 
@@ -79,5 +55,54 @@ public class GoogleMapsDemo extends AbstractDemo {
     @Override
     public String getTitle() {
         return "Google Maps";
+    }
+
+    private HBox getButtonBox() {
+        HBox box = new HBox();
+        box.setHorizontalCenter(0);
+        box.setTop(20);
+        box.setPercentSize(50, 50);
+
+        Button button = new Button("Change Map Type");
+        button.addEventHandler(MouseEvent.CLICK, new EventHandler() {
+            @Override
+            public void onEvent(Event event) {
+                googleMap.setMapType(getMapType());
+            }
+        });
+        box.addElement(button);
+
+        button = new Button("Add Marker");
+        button.addEventHandler(MouseEvent.CLICK, new EventHandler() {
+            @Override
+            public void onEvent(Event event) {
+
+                LatLng position = googleMap.getCenter();
+                Marker marker = new Marker(googleMap, position);
+
+                InfoWindow info = new InfoWindow();
+                info.setContent("Flash4j and Google Maps for the win !");
+                info.open(googleMap, marker);
+            }
+        });
+        box.addElement(button);
+
+        button = new Button("Get Current Location");
+        button.addEventHandler(MouseEvent.CLICK, new EventHandler() {
+            @Override
+            public void onEvent(Event event) {
+                Window.alert("Coming soon ...");
+            }
+        });
+        box.addElement(button);
+        box.addElement(button);
+
+        return box;
+    }
+
+    private MapTypeId getMapType() {
+        MapTypeId[] ids = { MapTypeId.HYBRID, MapTypeId.ROADMAP, MapTypeId.SATELLITE, MapTypeId.TERRAIN };
+        int index = Random.nextInt(4);
+        return ids[index];
     }
 }
