@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='flex4jexplorer'>
+ <inherits name='com.emitrom.flash4j.flex.Flex'/>
+ <inherits name='com.emitrom.flash4j.flex.ux.UX'/>
+ <inherits name='com.emitrom.flash4j.tween.Tween'/>
+ <inherits name='com.emitrom.flash4j.flex.flexlib.FlexLib'/>
+ <inherits name='com.emitrom.flash4j.alivepdf.AlivePDF'/>
+ <inherits name='com.emitrom.flash4j.excel.Excel'/>
+ <inherits name='com.emitrom.flash4j.flex.maps.Maps'/>
+ <inherits name='com.emitrom.pilot.maps.Maps'/>
+ 
+  <entry-point class='com.emitrom.flex4j.explorer.client.Flex4jExplorer'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
+  <source path='shared'/>
+
+</module>

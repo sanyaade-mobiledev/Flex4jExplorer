@@ -1,0 +1,2 @@
+serviceClass: com.emitrom.flex4j.explorer.client.GreetingService
+path: E0A8AC03A6E13C200BC587416A5A4B59.gwt.rpc

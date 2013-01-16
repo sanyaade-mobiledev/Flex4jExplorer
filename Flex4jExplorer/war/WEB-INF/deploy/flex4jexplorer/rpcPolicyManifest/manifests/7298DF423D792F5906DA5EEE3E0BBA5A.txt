@@ -1,0 +1,2 @@
+serviceClass: com.emitrom.flex4j.explorer.client.KitchenSinkService
+path: E3F12ED2368D6BD6F999BB189DA710F5.gwt.rpc
